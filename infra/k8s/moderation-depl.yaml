@@ -1,0 +1,33 @@
+#Configuring the deployment for moderation service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moderation
+  template:
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: moderation:1.0.0
+
+---
+#Configuring the clutser service for moderation
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-clu-srv
+spec:
+  selector:
+    app: moderation
+  ports:
+    - name: moderation
+      protocol: TCP
+      targetPort: 4003
+      port: 4003

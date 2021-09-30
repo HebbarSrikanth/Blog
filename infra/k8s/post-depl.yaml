@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-depl
+spec:
+  selector:
+    matchLabels:
+      app: post
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: post
+    spec:
+      containers:
+        - name: post
+          image: posts:1.0.2
+
+---
+#Configuring the Cluster Service for post
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-clu-srv
+spec:
+  selector:
+    app: post
+  ports:
+    - name: post
+      protocol: TCP
+      targetPort: 4000
+      port: 4000

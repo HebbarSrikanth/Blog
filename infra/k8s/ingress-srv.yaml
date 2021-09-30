@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-svc
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  defaultBackend:
+    service:
+      name: frontend-clu-srv
+      port:
+        number: 3000
+  rules:
+    - host: posts.co
+      http:
+        paths:
+          - path: /posts/create
+            pathType: Prefix
+            backend:
+              service:
+                name: post-clu-srv
+                port:
+                  number: 4000
+          - path: /posts
+            pathType: Prefix
+            backend:
+              service:
+                name: query-clu-srv
+                port:
+                  number: 4002
+          - path: /posts/?(.*)/comments
+            pathType: Prefix
+            backend:
+              service:
+                name: comments-clu-srv
+                port:
+                  number: 5000
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-clu-srv
+                port:
+                  number: 3000
